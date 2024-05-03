@@ -66,7 +66,7 @@ export default function App() {
       }
       fetchMovies();
     },
-    [query]
+    [query] //  this will run when query changes
   );
 
   function handleSelectMovie(id) {
@@ -139,13 +139,27 @@ function Logo() {
 }
 
 function Search({ query, setQuery }) {
+  const [inputValue, setInputValue] = useState(query);
+
+  useEffect(
+    function () {
+      const timeoutId = setTimeout(() => {
+        setQuery(inputValue);
+      }, 500);
+      return function () {
+        clearTimeout(timeoutId);
+      };
+    },
+    [inputValue, setQuery]
+  );
+
   return (
     <input
       className="search"
       type="text"
       placeholder="Search movies..."
-      value={query}
-      onChange={(e) => setQuery(e.target.value)}
+      value={inputValue}
+      onChange={(e) => setInputValue(e.target.value)}
     />
   );
 }
@@ -233,7 +247,7 @@ function MovieDetails({ imdbID, onClosemovie }) {
       }
       getMoveiDetails();
     },
-    [imdbID]
+    [imdbID] //  this will run when imdbID changes
   );
 
   return (
