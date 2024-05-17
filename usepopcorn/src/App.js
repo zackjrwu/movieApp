@@ -94,7 +94,7 @@ export default function App() {
 
         <Box>
           {imdbID ? (
-            <MovieDetails imdbID={imdbID} onClosemovie={handleCloseMovie} />
+            <MovieDetails imdbID={imdbID} onCloseMovie={handleCloseMovie} />
           ) : (
             <>
               <WatchedSummary watched={watched} />
@@ -218,7 +218,7 @@ function Movie({ movie, onSelectedMovie }) {
   );
 }
 
-function MovieDetails({ imdbID, onClosemovie }) {
+function MovieDetails({ imdbID, onCloseMovie }) {
   const [movie, setMovie] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const {
@@ -257,7 +257,7 @@ function MovieDetails({ imdbID, onClosemovie }) {
       ) : (
         <>
           <header>
-            <button className="btn-back" onClick={() => onClosemovie()}>
+            <button className="btn-back" onClick={() => onCloseMovie()}>
               &larr;
             </button>
             <img src={poster} alt={`Poster of ${movie} movie`} />
