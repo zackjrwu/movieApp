@@ -271,9 +271,10 @@ function MovieDetails({ imdbID, onAddWatched, onCloseMovie, watched }) {
     onCloseMovie();
   }
 
+  //  get movie details from the API
   useEffect(
     function () {
-      async function getMoveiDetails() {
+      async function getMovieDetails() {
         setIsLoading(true);
         const res = await fetch(
           `http://www.omdbapi.com/?apikey=${KEY}&i=${imdbID}`
@@ -282,10 +283,17 @@ function MovieDetails({ imdbID, onAddWatched, onCloseMovie, watched }) {
         setMovie(data);
         setIsLoading(false);
       }
-      getMoveiDetails();
+      getMovieDetails();
     },
     [imdbID] //  this will run when imdbID changes
   );
+
+  //  change the title depending title of the movie
+  useEffect(
+    function () {
+      if(!title) return;
+      document.title = `MOVIE: ${title}`;
+    }, [title])
 
   return (
     <div className="details">
