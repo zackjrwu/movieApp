@@ -291,9 +291,14 @@ function MovieDetails({ imdbID, onAddWatched, onCloseMovie, watched }) {
   //  change the title depending title of the movie
   useEffect(
     function () {
-      if(!title) return;
+      if (!title) return;
       document.title = `MOVIE: ${title}`;
-    }, [title])
+      return function () {
+        document.title = "usePopcorn";
+      };
+    },
+    [title]
+  );
 
   return (
     <div className="details">
