@@ -9,9 +9,14 @@ export default function App() {
   const [query, setQuery] = useState("toy");
   const [movies, setMovies] = useState([]);
   const [imdbID, setImdbID] = useState(null);
-  const [watched, setWatched] = useState([]);
+  // const [watched, setWatched] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
+  // watched movies use local storage with initial value
+  const [watched, setWatched] = useState(function(){
+    const storedValue = localStorage.getItem("watched");
+    return storedValue ? JSON.parse(storedValue) : [];
+  });
   const tempQuery = "interstellar";
   /*
   useEffect(function () {
@@ -72,6 +77,7 @@ export default function App() {
   );
 */
 
+
   //  fetch movies with AbortController
   useEffect(
     function () {
@@ -105,6 +111,7 @@ export default function App() {
         setError("");
         return;
       }
+      handleCloseMovie();
       fetchMovies();
       return function () {
         controller.abort();
@@ -112,6 +119,10 @@ export default function App() {
     },
     [query]
   );
+
+  useEffect(function(){
+    localStorage.setItem("watched", JSON.stringify(watched));
+  }, [watched]);
 
   function handleSelectMovie(id) {
     setImdbID((selectedID) => (id === selectedID ? null : id));
@@ -314,6 +325,20 @@ function MovieDetails({ imdbID, onAddWatched, onCloseMovie, watched }) {
     onAddWatched(newWatchedMovie);
     onCloseMovie();
   }
+
+  useEffect(function(){
+
+    function callback(e){
+      if(e.key === "Escape"){
+        onCloseMovie();
+      }
+    }
+
+    document.addEventListener("keydown", callback);
+    return function(){
+      document.removeEventListener("keydown", callback);
+    }
+  },[onCloseMovie])
 
   //  get movie details from the API
   useEffect(
